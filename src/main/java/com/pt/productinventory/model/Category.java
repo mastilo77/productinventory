@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "category")
@@ -21,5 +22,6 @@ public class Category {
     @NotEmpty
     private String name;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Product> listings;
+    @Builder.Default
+    private List<Product> products = new ArrayList<>();
 }

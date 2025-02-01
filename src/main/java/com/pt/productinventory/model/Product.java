@@ -2,6 +2,7 @@ package com.pt.productinventory.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity(name = "product")
@@ -20,9 +21,9 @@ public class Product {
     private String name;
     @NotEmpty
     private String description;
-    @NotEmpty
+    @NotNull
     private Double price;
-    @NotEmpty
+    @NotNull
     private Integer quantity;
     @ManyToOne
     @JoinColumn(name = "category_id")
