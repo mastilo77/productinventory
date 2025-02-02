@@ -1,7 +1,7 @@
 package com.pt.productinventory.service;
 
 import com.pt.productinventory.model.Product;
-import com.pt.productinventory.model.SortDirection;
+import com.pt.productinventory.model.enums.SortDirection;
 import com.pt.productinventory.model.dto.ProductRequestDto;
 import com.pt.productinventory.model.dto.ProductResponseDto;
 import com.pt.productinventory.model.dto.ProductUpdateDto;

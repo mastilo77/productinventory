@@ -1,4 +1,4 @@
-package com.pt.productinventory.model;
+package com.pt.productinventory.model.enums;
 
 public enum SortDirection {
     ASC, DESC;

@@ -56,6 +56,6 @@ public class InitDbServiceImpl implements InitDbService {
         hardware.getProducts().add(wirelessHeadphones);
 
         //        productRepository.saveAll(List.of(apple, pear, wirelessHeadphones));
-        categoryRepository.saveAll(List.of(fruit, hardware));
+//        categoryRepository.saveAll(List.of(fruit, hardware));
     }
 }

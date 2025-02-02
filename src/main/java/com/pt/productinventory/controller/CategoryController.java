@@ -1,17 +1,15 @@
 package com.pt.productinventory.controller;
 
-import com.pt.productinventory.model.SortDirection;
+import com.pt.productinventory.model.enums.SortDirection;
 import com.pt.productinventory.model.dto.CategoryRequestDto;
 import com.pt.productinventory.model.dto.CategoryResponseDto;
 import com.pt.productinventory.model.dto.CategoryUpdateDto;
 import com.pt.productinventory.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
