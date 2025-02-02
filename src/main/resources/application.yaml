@@ -16,7 +16,3 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operationsSorter: method
-
-app:
-  artifactId: '@project.artifactId@'
-  version: '@project.version@'
