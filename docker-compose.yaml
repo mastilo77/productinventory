@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  app:
+    image: mastilovic/productinventory:latest
+    hostname: productinventory
+    ports:
+      - "8080:8080"
