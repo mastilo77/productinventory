@@ -12,7 +12,8 @@ import java.util.Objects;
 public class ProductMapper {
 
     public ProductResponseDto toProductResponseDto(Product product) {
-        boolean isCategoryEmpty = Objects.isNull(product.getCategory()) || StringUtils.isBlank(product.getCategory().getName());
+        boolean isCategoryEmpty =
+                Objects.isNull(product.getCategory()) || StringUtils.isBlank(product.getCategory().getName());
 
         return ProductResponseDto.builder()
                 .name(product.getName())

@@ -1,6 +1,5 @@
 package com.pt.productinventory.model.dto;
 
-import com.pt.productinventory.model.Category;
 import lombok.*;
 
 @Getter

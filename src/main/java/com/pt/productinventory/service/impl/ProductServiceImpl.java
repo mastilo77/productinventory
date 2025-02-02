@@ -1,6 +1,5 @@
 package com.pt.productinventory.service.impl;
 
-import com.pt.productinventory.error.exceptions.IllegalParameterException;
 import com.pt.productinventory.error.exceptions.ObjectNotFoundException;
 import com.pt.productinventory.mapper.ProductMapper;
 import com.pt.productinventory.model.Category;
@@ -12,7 +11,6 @@ import com.pt.productinventory.repository.ProductRepository;
 import com.pt.productinventory.service.CategoryService;
 import com.pt.productinventory.service.ProductService;
 import com.pt.productinventory.validator.ValidatorService;
-import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +42,6 @@ public class ProductServiceImpl implements ProductService {
                 .description(productRequestDto.getDescription())
                 .price(productRequestDto.getPrice())
                 .quantity(productRequestDto.getQuantity())
-                .category(categoryService.findById(productRequestDto.getCategoryId()))
                 .build();
 
         validatorService.validate(product);
@@ -85,19 +82,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto findByName(String name) {
-        log.debug("calling findByName method in {}", className);
-
-        if (StringUtils.isBlank(name)) {
-            throw new IllegalParameterException("Name parameter is not valid: " + name);
-        }
-
-        return productRepository.findByName(name)
-                .map(productMapper::toProductResponseDto)
-                .orElseThrow(() -> new ObjectNotFoundException("Product not found with name: " + name));
-    }
-
-    @Override
+    @Transactional
     public ProductResponseDto update(Long productId, ProductUpdateDto productUpdateDto) {
         log.debug("calling update method in {}", className);
 
@@ -155,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryService.findById(categoryId);
         Product product = findById(productId);
 
-        category.getProducts().remove(product);
+        category.getProducts().removeIf(p -> p.getId().equals(productId));
         product.setCategory(null);
 
         save(product);

@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
-public class Category {
+@EqualsAndHashCode(callSuper = false)
+public class Category extends LockVersion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

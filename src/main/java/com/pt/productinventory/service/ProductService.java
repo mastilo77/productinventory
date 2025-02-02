@@ -15,12 +15,14 @@ public interface ProductService {
     Page<ProductResponseDto> findAllPageable(Pageable pageable);
 
     ProductResponseDto findByIdResponseDto(Long id);
+
     Product findById(Long id);
 
-    ProductResponseDto findByName(String name);
     ProductResponseDto update(Long productId, ProductUpdateDto productUpdateDto);
 
     void deleteById(Long id);
+
     void addCategoryToProduct(Long categoryId, Long productId);
+
     void removeCategoryFromProduct(Long categoryId, Long productId);
 }

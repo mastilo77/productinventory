@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/products")
 @AllArgsConstructor
 @Tag(name = "Product Management API")
 public class ProductController {
@@ -44,12 +44,6 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(productService.findByIdResponseDto(id));
-    }
-
-    @Operation(summary = "Search product by name")
-    @GetMapping("/search")
-    public ResponseEntity<ProductResponseDto> findByName(@RequestParam(name = "name") String name) {
-        return ResponseEntity.ok(productService.findByName(name));
     }
 
     @Operation(summary = "Update product by id")

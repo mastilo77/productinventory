@@ -12,8 +12,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
-public class Product {
+@EqualsAndHashCode(callSuper = false)
+public class Product extends LockVersion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
