@@ -1,5 +1,6 @@
 package com.pt.productinventory.validator;
 
+import com.pt.productinventory.error.exceptions.IllegalParameterException;
 import com.pt.productinventory.error.exceptions.ObjectNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -32,6 +33,17 @@ public class ValidatorService {
         if (!violations.isEmpty()) {
             log.error("Error: Validator Constraint Validation Exception occurred! Error message: {}", violations);
             throw new ConstraintViolationException(violations);
+        }
+    }
+
+    public <T> void validateClassField(Class<T> clazz, String fieldName) {
+        log.debug("calling validateField method in {}", className);
+
+        try {
+            clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            log.error("No field found with name: {}", fieldName);
+            throw new IllegalParameterException("No field found with name: " + fieldName);
         }
     }
 }

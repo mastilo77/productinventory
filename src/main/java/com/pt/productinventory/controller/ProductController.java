@@ -1,5 +1,7 @@
 package com.pt.productinventory.controller;
 
+import com.pt.productinventory.model.ProductFilter;
+import com.pt.productinventory.model.SortDirection;
 import com.pt.productinventory.model.dto.ProductRequestDto;
 import com.pt.productinventory.model.dto.ProductResponseDto;
 import com.pt.productinventory.model.dto.ProductUpdateDto;
@@ -9,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,14 @@ public class ProductController {
 
     @Operation(summary = "Get all products paginated")
     @GetMapping("/paginated")
-    public ResponseEntity<Page<ProductResponseDto>> findAllPageable(Pageable pageable) {
-        return ResponseEntity.ok(productService.findAllPageable(pageable));
+    public ResponseEntity<Page<ProductResponseDto>> findAllPageable(@RequestParam(defaultValue = "0") Integer pageNum,
+                                                                    @RequestParam(defaultValue = "10") Integer pageSize,
+                                                                    @RequestParam(defaultValue = "name") String sortBy,
+                                                                    @RequestParam(defaultValue = "ASC") SortDirection sortDirection,
+                                                                    @RequestParam(required = false) String name,
+                                                                    @RequestParam(required = false) Double minPrice,
+                                                                    @RequestParam(required = false) Double maxPrice) {
+        return ResponseEntity.ok(productService.findAllPageable(pageNum, pageSize, sortBy, sortDirection, name, minPrice, maxPrice));
     }
 
     @Operation(summary = "Get product by id")

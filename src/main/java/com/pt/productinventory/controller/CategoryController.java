@@ -1,11 +1,13 @@
 package com.pt.productinventory.controller;
 
+import com.pt.productinventory.model.SortDirection;
 import com.pt.productinventory.model.dto.CategoryRequestDto;
 import com.pt.productinventory.model.dto.CategoryResponseDto;
 import com.pt.productinventory.model.dto.CategoryUpdateDto;
 import com.pt.productinventory.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,8 +37,11 @@ public class CategoryController {
 
     @Operation(summary = "Get all categories paginated")
     @GetMapping("/paginated")
-    public ResponseEntity<Page<CategoryResponseDto>> findAllPageable(Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findAllPageable(pageable));
+    public ResponseEntity<Page<CategoryResponseDto>> findAllPageable(@RequestParam(defaultValue = "0") Integer pageNum,
+                                                                     @RequestParam(defaultValue = "10") Integer pageSize,
+                                                                     @RequestParam(defaultValue = "name") String sortBy,
+                                                                     @RequestParam(defaultValue = "ASC") SortDirection sortDirection) {
+        return ResponseEntity.ok(categoryService.findAllPageable(pageNum, pageSize, sortBy, sortDirection));
     }
 
     @Operation(summary = "Get category by id")

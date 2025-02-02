@@ -5,6 +5,7 @@ import com.pt.productinventory.error.exceptions.ObjectNotFoundException;
 import com.pt.productinventory.mapper.CategoryMapper;
 import com.pt.productinventory.model.Category;
 import com.pt.productinventory.model.Product;
+import com.pt.productinventory.model.SortDirection;
 import com.pt.productinventory.model.dto.CategoryRequestDto;
 import com.pt.productinventory.model.dto.CategoryResponseDto;
 import com.pt.productinventory.model.dto.CategoryUpdateDto;
@@ -17,11 +18,13 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,10 +63,21 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<CategoryResponseDto> findAllPageable(Pageable pageable) {
+    public Page<CategoryResponseDto> findAllPageable(Integer pageNum,
+                                                     Integer pageSize,
+                                                     String sortBy,
+                                                     SortDirection sortDirection) {
         log.debug("calling findAllPageable method in {}", className);
 
-        return categoryRepository.findAll(pageable)
+        validatorService.validateClassField(Category.class, sortBy);
+
+        Sort sortByDirection = Objects.equals(sortDirection.name(), SortDirection.ASC.name())
+                               ? Sort.by(sortBy).ascending()
+                               : Sort.by(sortBy).descending();
+
+        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sortByDirection);
+
+        return categoryRepository.findAll(pageRequest)
                 .map(categoryMapper::toCategoryResponseDto);
     }
 
@@ -121,12 +135,9 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Long id) {
         log.debug("calling deleteById method in {}", className);
 
-        categoryRepository.findById(id)
-                .ifPresentOrElse(category -> {
-                    log.info("category found with id: {}", id);
-                    categoryRepository.deleteById(category.getId());
-                    log.info("category deleted successfully!");
-                }, () -> log.info("Unable to complete deletion! Category not found with id: {}", id));
+        categoryRepository.deleteById(id);
+
+        log.info("Successfully deleted category with id: {}", id);
     }
 
     @Transactional

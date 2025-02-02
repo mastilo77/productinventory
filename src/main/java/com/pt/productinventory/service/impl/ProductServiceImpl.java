@@ -4,6 +4,8 @@ import com.pt.productinventory.error.exceptions.ObjectNotFoundException;
 import com.pt.productinventory.mapper.ProductMapper;
 import com.pt.productinventory.model.Category;
 import com.pt.productinventory.model.Product;
+import com.pt.productinventory.model.ProductFilter;
+import com.pt.productinventory.model.SortDirection;
 import com.pt.productinventory.model.dto.ProductRequestDto;
 import com.pt.productinventory.model.dto.ProductResponseDto;
 import com.pt.productinventory.model.dto.ProductUpdateDto;
@@ -15,9 +17,12 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -59,10 +64,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponseDto> findAllPageable(Pageable pageable) {
+    public Page<ProductResponseDto> findAllPageable(Integer pageNum,
+                                                    Integer pageSize,
+                                                    String sortBy,
+                                                    SortDirection sortDirection,
+                                                    String name,
+                                                    Double minPrice,
+                                                    Double maxPrice) {
         log.debug("calling findAllPageable method in {}", className);
 
-        return productRepository.findAll(pageable)
+        validatorService.validateClassField(Product.class, sortBy);
+
+        ProductFilter productFilter = ProductFilter.builder()
+                .name(name)
+                .minPrice(minPrice)
+                .maxPrice(maxPrice)
+                .build();
+
+        Specification<Product> productSpecification = createFilterSpecification(productFilter);
+
+        Sort sortByDirection = Objects.equals(sortDirection.name(), SortDirection.ASC.name())
+                               ? Sort.by(sortBy).ascending()
+                               : Sort.by(sortBy).descending();
+
+        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sortByDirection);
+
+        return productRepository.findAll(productSpecification, pageRequest)
                 .map(productMapper::toProductResponseDto);
     }
 
@@ -111,12 +138,9 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(Long id) {
         log.debug("calling deleteById method in {}", className);
 
-        productRepository.findById(id)
-                .ifPresentOrElse(product -> {
-                    log.info("product found with id: {}", id);
-                    productRepository.deleteById(product.getId());
-                    log.info("product deleted successfully!");
-                }, () -> log.info("Unable to complete deletion! Product not found with id: {}", id));
+        productRepository.deleteById(id);
+
+        log.info("Successfully deleted product with id: {}", id);
     }
 
     @Override
@@ -151,5 +175,26 @@ public class ProductServiceImpl implements ProductService {
         log.debug("calling save method in {}", className);
 
         return productRepository.save(product);
+    }
+
+    private Specification<Product> createFilterSpecification(ProductFilter filter) {
+        log.debug("calling createFilterSpecification method in {}", className);
+
+        Specification<Product> spec = Specification.where(null);
+
+        if (filter.getName() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                                    criteriaBuilder.like(root.get("name"), "%" + filter.getName() + "%"));
+        }
+        if (filter.getMinPrice() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                                    criteriaBuilder.greaterThanOrEqualTo(root.get("price"), filter.getMinPrice()));
+        }
+        if (filter.getMaxPrice() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                                    criteriaBuilder.lessThanOrEqualTo(root.get("price"), filter.getMaxPrice()));
+        }
+
+        return spec;
     }
 }

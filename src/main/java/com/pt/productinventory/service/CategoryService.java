@@ -1,11 +1,11 @@
 package com.pt.productinventory.service;
 
 import com.pt.productinventory.model.Category;
+import com.pt.productinventory.model.SortDirection;
 import com.pt.productinventory.model.dto.CategoryRequestDto;
 import com.pt.productinventory.model.dto.CategoryResponseDto;
 import com.pt.productinventory.model.dto.CategoryUpdateDto;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
 
@@ -13,7 +13,10 @@ public interface CategoryService {
 
     Iterable<CategoryResponseDto> findAll();
 
-    Page<CategoryResponseDto> findAllPageable(Pageable pageable);
+    Page<CategoryResponseDto> findAllPageable(Integer pageNum,
+                                              Integer pageSize,
+                                              String sortBy,
+                                              SortDirection sortDirection);
 
     CategoryResponseDto findByIdResponseDto(Long id);
 
