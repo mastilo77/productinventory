@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/products")
 @AllArgsConstructor
@@ -30,7 +32,7 @@ public class ProductController {
 
     @Operation(summary = "Get all products")
     @GetMapping
-    public ResponseEntity<Iterable<ProductResponseDto>> findAll() {
+    public ResponseEntity<List<ProductResponseDto>> findAll() {
         return ResponseEntity.ok(productService.findAll());
 
     }

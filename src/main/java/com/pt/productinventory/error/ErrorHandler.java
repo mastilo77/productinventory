@@ -1,7 +1,6 @@
 package com.pt.productinventory.error;
 
 import com.pt.productinventory.error.exceptions.IllegalParameterException;
-import com.pt.productinventory.error.exceptions.ObjectAlreadyExistsException;
 import com.pt.productinventory.error.exceptions.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 public class ErrorHandler {
 
     @ResponseBody
-    @ExceptionHandler({ObjectAlreadyExistsException.class, ConstraintViolationException.class, IllegalParameterException.class})
+    @ExceptionHandler({ConstraintViolationException.class, IllegalParameterException.class})
     public ResponseEntity<HttpResponse> handleBadRequestExceptions(Exception e, HttpServletRequest request) {
         return createHttpResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
     }

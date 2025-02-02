@@ -7,11 +7,13 @@ import com.pt.productinventory.model.dto.CategoryResponseDto;
 import com.pt.productinventory.model.dto.CategoryUpdateDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface CategoryService {
 
     CategoryResponseDto save(CategoryRequestDto categoryRequestDto);
 
-    Iterable<CategoryResponseDto> findAll();
+    List<CategoryResponseDto> findAll();
 
     Page<CategoryResponseDto> findAllPageable(Integer pageNum,
                                               Integer pageSize,

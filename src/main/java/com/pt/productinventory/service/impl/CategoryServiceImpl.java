@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Iterable<CategoryResponseDto> findAll() {
+    public List<CategoryResponseDto> findAll() {
         log.debug("calling findAll method in {}", className);
 
         return categoryRepository.findAll()

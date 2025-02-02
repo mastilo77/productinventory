@@ -42,7 +42,7 @@ public class ValidatorService {
         try {
             clazz.getDeclaredField(fieldName);
         } catch (NoSuchFieldException e) {
-            log.error("No field found with name: {}", fieldName);
+            log.error("No field found with name: {} for class {}", fieldName, clazz.getName());
             throw new IllegalParameterException("No field found with name: " + fieldName);
         }
     }

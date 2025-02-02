@@ -7,10 +7,12 @@ import com.pt.productinventory.model.dto.ProductResponseDto;
 import com.pt.productinventory.model.dto.ProductUpdateDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface ProductService {
     ProductResponseDto save(ProductRequestDto productRequestDto);
 
-    Iterable<ProductResponseDto> findAll();
+    List<ProductResponseDto> findAll();
 
     Page<ProductResponseDto> findAllPageable(Integer pageNum,
                                              Integer pageSize,

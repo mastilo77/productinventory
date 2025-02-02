@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/category")
 @AllArgsConstructor
@@ -31,7 +33,7 @@ public class CategoryController {
 
     @Operation(summary = "Get all categories")
     @GetMapping
-    public ResponseEntity<Iterable<CategoryResponseDto>> findAll() {
+    public ResponseEntity<List<CategoryResponseDto>> findAll() {
         return ResponseEntity.ok(categoryService.findAll());
     }
 

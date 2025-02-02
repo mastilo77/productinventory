@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Iterable<ProductResponseDto> findAll() {
+    public List<ProductResponseDto> findAll() {
         log.debug("calling findAll method in {}", className);
 
         return productRepository.findAll().stream()
